@@ -1,0 +1,88 @@
+{
+  "planets": [
+    {
+      "name": "Mercury",
+      "planet_type": "Terrestrial",
+      "distance_from_sun": 0.39,
+      "radius": 2439.7,
+      "description": "The smallest planet in our solar system and the closest to the Sun. Mercury has extreme temperature variations and no atmosphere.",
+      "mass": 3.3011e23,
+      "orbital_period": 87.97
+    },
+    {
+      "name": "Venus",
+      "planet_type": "Terrestrial",
+      "distance_from_sun": 0.72,
+      "radius": 6051.8,
+      "description": "The hottest planet in our solar system due to its thick atmosphere. Often called Earth's twin due to similar size.",
+      "mass": 4.8675e24,
+      "orbital_period": 224.7
+    },
+    {
+      "name": "Earth",
+      "planet_type": "Terrestrial",
+      "distance_from_sun": 1.0,
+      "radius": 6371.0,
+      "description": "Our home planet, the only known planet with life. Has liquid water, a protective atmosphere, and a magnetic field.",
+      "mass": 5.9724e24,
+      "orbital_period": 365.25
+    },
+    {
+      "name": "Mars",
+      "planet_type": "Terrestrial",
+      "distance_from_sun": 1.52,
+      "radius": 3389.5,
+      "description": "The Red Planet, known for its reddish appearance due to iron oxide on its surface. Has polar ice caps and evidence of ancient water.",
+      "mass": 6.4171e23,
+      "orbital_period": 686.98
+    },
+    {
+      "name": "Jupiter",
+      "planet_type": "Gas Giant",
+      "distance_from_sun": 5.20,
+      "radius": 69911,
+      "description": "The largest planet in our solar system. A gas giant with a Great Red Spot storm and over 80 moons.",
+      "mass": 1.8982e27,
+      "orbital_period": 4332.59
+    },
+    {
+      "name": "Saturn",
+      "planet_type": "Gas Giant",
+      "distance_from_sun": 9.58,
+      "radius": 58232,
+      "description": "Famous for its prominent ring system made of ice and rock particles. Has a density less than water.",
+      "mass": 5.6834e26,
+      "orbital_period": 10759.22
+    },
+    {
+      "name": "Uranus",
+      "planet_type": "Ice Giant",
+      "distance_from_sun": 19.22,
+      "radius": 25362,
+      "description": "An ice giant that rotates on its side. Has a unique tilted magnetic field and faint rings.",
+      "mass": 8.6810e25,
+      "orbital_period": 30688.5
+    },
+    {
+      "name": "Neptune",
+      "planet_type": "Ice Giant",
+      "distance_from_sun": 30.05,
+      "radius": 24622,
+      "description": "The windiest planet in our solar system with speeds up to 2,100 km/h. Deep blue color due to methane in its atmosphere.",
+      "mass": 1.0243e26,
+      "orbital_period": 60182
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "email": "admin@planets.com",
+      "password": "admin123"
+    },
+    {
+      "username": "testuser",
+      "email": "test@planets.com",
+      "password": "test123"
+    }
+  ]
+}
