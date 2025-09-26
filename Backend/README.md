@@ -1,15 +1,16 @@
 # 🌍 Planets API
 
-A Flask-based REST API for managing planet data with JWT authentication, built with Python 3.13 compatibility.
+A FastAPI-based REST API for managing planet data with JWT authentication, SQLAlchemy ORM, and automatic OpenAPI documentation.
 
 ## ✨ Features
 
-- **🔐 JWT Authentication**: Secure access to protected endpoints
+- **🔐 JWT Authentication**: Secure access to protected endpoints using python-jose
 - **🪐 Planet Management**: Full CRUD operations for planet data
-- **💾 In-Memory Storage**: Fast, lightweight data storage
+- **💾 SQLite Database**: Persistent data storage with SQLAlchemy ORM
 - **🌱 Pre-loaded Data**: Mercury through Neptune planets included
-- **🚀 Python 3.13 Compatible**: Works with the latest Python version
-- **🔧 Simple Setup**: Minimal dependencies and configuration
+- **📖 Auto-generated Docs**: Swagger UI and ReDoc documentation
+- **🔧 OpenAPI 3.0**: Complete API specification with examples
+- **🚀 FastAPI Framework**: Modern, fast, and type-safe API framework
 
 ## 🚀 Quick Start
 
@@ -54,22 +55,28 @@ A Flask-based REST API for managing planet data with JWT authentication, built w
    # Navigate to the Backend directory first
    cd Backend
    
-   # Then run the Flask application
-   python flask_app.py
+   # Then run the FastAPI application
+   uvicorn app:app --host 0.0.0.0 --port 8000 --reload
    ```
 
    **Expected output:**
    ```
    🌍 Starting Planets API...
    📚 API available at: http://localhost:8000
-   ✅ Initialized 8 planets and 2 users
-   * Running on http://127.0.0.1:8000
+   📖 Swagger UI available at: http://localhost:8000/docs
+   📋 OpenAPI spec available at: http://localhost:8000/openapi.json
+   ✅ Database tables created
+   ✅ Database seeded with initial data
+   INFO:     Uvicorn running on http://0.0.0.0:8000
    ```
 
 5. **Access the API:**
    - **API Base URL**: http://localhost:8000
    - **Health Check**: http://localhost:8000/health
    - **All Planets**: http://localhost:8000/planets
+   - **Swagger UI**: http://localhost:8000/docs
+   - **ReDoc**: http://localhost:8000/redoc
+   - **OpenAPI Spec**: http://localhost:8000/openapi.json
 
 ## 📖 API Documentation
 
@@ -331,56 +338,65 @@ Run with: `python test_api.py`
 
 ```
 Backend/
-├── flask_app.py           # Flask application (main entry point)
-├── seed_data.json         # Initial planet and user data
-├── requirements.txt       # Python dependencies
-├── env.example           # Environment variables template
-└── README.md             # This file
+├── app.py                # Complete FastAPI application (single file)
+├── seed_data.json        # Initial planet and user data
+├── requirements.txt      # Python dependencies
+├── .env                  # Environment variables (auto-generated)
+├── openapi.json          # Exported OpenAPI specification
+└── README.md            # This file
 ```
 
 ## ⚙️ Configuration
 
-### Environment Variables (Optional)
+### Environment Variables
 
-The API works out of the box with default settings. For customization, create a `.env` file:
+The API uses environment variables for configuration. A `.env` file is created automatically:
 
 ```env
-# JWT Configuration (optional - defaults work fine)
-JWT_SECRET_KEY=your-secret-key-here-change-in-production
+# JWT Configuration
+JWT_SECRET_KEY=your-secret-key-change-in-production-make-it-long-and-random
 JWT_ALGORITHM=HS256
 JWT_ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# Database Configuration
+DATABASE_URL=sqlite:///./planets.db
+
+# App Configuration
+APP_NAME=Planets API
+APP_VERSION=1.0.0
 ```
 
 ### Data Storage
 
-The application uses in-memory storage, which means:
-- **Fast**: No database overhead
-- **Simple**: No setup required
-- **Temporary**: Data resets when server restarts
-- **Perfect for**: Development, testing, and demos
+The application uses SQLite database with SQLAlchemy ORM, which means:
+- **Persistent**: Data survives server restarts
+- **Relational**: Proper database relationships and constraints
+- **Scalable**: Easy to migrate to PostgreSQL/MySQL later
+- **Production Ready**: Suitable for real applications
 
 ## 🔧 Development
 
 ### Adding New Features
 
-1. **New Endpoints**: Add routes to `flask_app.py`
-2. **Authentication**: Use the `@token_required` decorator
-3. **Data Models**: Modify the in-memory data structures
-4. **Validation**: Add request validation as needed
+1. **New Endpoints**: Add routes to `routes/` directory
+2. **Authentication**: Use the `get_current_user` dependency
+3. **Data Models**: Add new models to `models.py`
+4. **Validation**: Add Pydantic schemas to `schemas.py`
+5. **Database**: Use SQLAlchemy ORM for data operations
 
 ### Code Structure
 
-- `flask_app.py` - Main application file with all routes and logic
-- `seed_data.json` - Initial planet data
+- `app.py` - Complete FastAPI application (single file with everything)
+- `seed_data.json` - Initial planet and user data
 - `requirements.txt` - Python dependencies
 
 ## 🚀 Production Deployment
 
-### Using Gunicorn (Recommended)
+### Using Uvicorn (Recommended)
 
 ```bash
-pip install gunicorn
-gunicorn -w 4 -b 0.0.0.0:8000 flask_app:app
+pip install uvicorn[standard]
+uvicorn app:app --host 0.0.0.0 --port 8000 --workers 4
 ```
 
 ### Using Docker
@@ -397,17 +413,18 @@ RUN pip install -r requirements.txt
 COPY . .
 EXPOSE 8000
 
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "flask_app:app"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
 ```
 
 ### Production Considerations
 
-1. **Database**: Switch to PostgreSQL/MySQL for persistent storage
-2. **Environment Variables**: Use secure secrets
+1. **Database**: Already using SQLite, consider PostgreSQL/MySQL for production
+2. **Environment Variables**: Use secure secrets management
 3. **HTTPS**: Enable SSL/TLS encryption
-4. **Rate Limiting**: Implement rate limiting
-5. **Logging**: Add comprehensive logging
-6. **Monitoring**: Set up health checks
+4. **Rate Limiting**: Implement rate limiting middleware
+5. **Logging**: Add comprehensive logging with structured logs
+6. **Monitoring**: Set up health checks and metrics
+7. **OpenAPI**: Export and version your API specification
 
 ## 📝 License
 

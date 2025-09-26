@@ -1,0 +1,635 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Planets API",
+    "description": "A REST API for managing planet data with JWT authentication",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/planets/": {
+      "get": {
+        "tags": [
+          "planets"
+        ],
+        "summary": "List all planets",
+        "description": "Get all planets.\n\nThis endpoint returns a list of all planets in the database.\nNo authentication required.",
+        "operationId": "get_planets_planets__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get Planets Planets  Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Planet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "planets"
+        ],
+        "summary": "Create new planet",
+        "description": "Create a new planet.\n\n- **name**: Planet name (required)\n- **planet_type**: Type of planet (Terrestrial, Gas Giant, etc.)\n- **distance_from_sun**: Distance from Sun in AU\n- **radius**: Planet radius in km\n- **description**: Optional planet description\n- **mass**: Optional planet mass in kg\n- **orbital_period**: Optional orbital period in days\n\nAuthentication required.",
+        "operationId": "create_planet_planets__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanetCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Planet"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/planets/{planet_id}": {
+      "get": {
+        "tags": [
+          "planets"
+        ],
+        "summary": "Get planet by ID",
+        "description": "Get a specific planet by its ID.\n\n- **planet_id**: The ID of the planet to retrieve\n\nReturns the planet details if found, otherwise returns 404.\nNo authentication required.",
+        "operationId": "get_planet_planets__planet_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Planet Id",
+              "type": "integer"
+            },
+            "name": "planet_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Planet"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "planets"
+        ],
+        "summary": "Update planet",
+        "description": "Update an existing planet.\n\n- **planet_id**: The ID of the planet to update\n- **planet_update**: Planet data to update (all fields optional)\n\nOnly provided fields will be updated.\nAuthentication required.",
+        "operationId": "update_planet_planets__planet_id__put",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Planet Id",
+              "type": "integer"
+            },
+            "name": "planet_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanetUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Planet"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "planets"
+        ],
+        "summary": "Delete planet",
+        "description": "Delete a planet.\n\n- **planet_id**: The ID of the planet to delete\n\nReturns 204 No Content on successful deletion.\nAuthentication required.",
+        "operationId": "delete_planet_planets__planet_id__delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Planet Id",
+              "type": "integer"
+            },
+            "name": "planet_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Login and get access token",
+        "description": "Login with username and password to get a JWT access token.\n\n- **username**: Your username\n- **password**: Your password\n\nReturns a JWT access token that can be used for authenticated requests.\nToken expires in 30 minutes by default.\n\nExample credentials:\n- Username: admin, Password: admin123\n- Username: testuser, Password: test123",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Get current user info",
+        "description": "Get information about the currently authenticated user.\n\nReturns user details including username, email, and creation date.\nAuthentication required.",
+        "operationId": "get_current_user_info_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "root"
+        ],
+        "summary": "API Information",
+        "description": "Get API information and available endpoints.\n\nReturns basic information about the API including version and available endpoints.",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health Check",
+        "description": "Check API health status.\n\nReturns the current health status of the API.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "Planet": {
+        "title": "Planet",
+        "required": [
+          "name",
+          "planet_type",
+          "distance_from_sun",
+          "radius",
+          "id",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string",
+            "description": "Planet name"
+          },
+          "planet_type": {
+            "title": "Planet Type",
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string",
+            "description": "Type of planet (Terrestrial, Gas Giant, etc.)"
+          },
+          "distance_from_sun": {
+            "title": "Distance From Sun",
+            "exclusiveMinimum": 0.0,
+            "type": "number",
+            "description": "Distance from Sun in AU"
+          },
+          "radius": {
+            "title": "Radius",
+            "exclusiveMinimum": 0.0,
+            "type": "number",
+            "description": "Planet radius in km"
+          },
+          "description": {
+            "title": "Description",
+            "maxLength": 1000,
+            "type": "string",
+            "description": "Planet description"
+          },
+          "mass": {
+            "title": "Mass",
+            "exclusiveMinimum": 0.0,
+            "type": "number",
+            "description": "Planet mass in kg"
+          },
+          "orbital_period": {
+            "title": "Orbital Period",
+            "exclusiveMinimum": 0.0,
+            "type": "number",
+            "description": "Orbital period in days"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "Schema for planet response"
+      },
+      "PlanetCreate": {
+        "title": "PlanetCreate",
+        "required": [
+          "name",
+          "planet_type",
+          "distance_from_sun",
+          "radius"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string",
+            "description": "Planet name"
+          },
+          "planet_type": {
+            "title": "Planet Type",
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string",
+            "description": "Type of planet (Terrestrial, Gas Giant, etc.)"
+          },
+          "distance_from_sun": {
+            "title": "Distance From Sun",
+            "exclusiveMinimum": 0.0,
+            "type": "number",
+            "description": "Distance from Sun in AU"
+          },
+          "radius": {
+            "title": "Radius",
+            "exclusiveMinimum": 0.0,
+            "type": "number",
+            "description": "Planet radius in km"
+          },
+          "description": {
+            "title": "Description",
+            "maxLength": 1000,
+            "type": "string",
+            "description": "Planet description"
+          },
+          "mass": {
+            "title": "Mass",
+            "exclusiveMinimum": 0.0,
+            "type": "number",
+            "description": "Planet mass in kg"
+          },
+          "orbital_period": {
+            "title": "Orbital Period",
+            "exclusiveMinimum": 0.0,
+            "type": "number",
+            "description": "Orbital period in days"
+          }
+        },
+        "description": "Schema for creating a new planet"
+      },
+      "PlanetUpdate": {
+        "title": "PlanetUpdate",
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "planet_type": {
+            "title": "Planet Type",
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "distance_from_sun": {
+            "title": "Distance From Sun",
+            "exclusiveMinimum": 0.0,
+            "type": "number"
+          },
+          "radius": {
+            "title": "Radius",
+            "exclusiveMinimum": 0.0,
+            "type": "number"
+          },
+          "description": {
+            "title": "Description",
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "mass": {
+            "title": "Mass",
+            "exclusiveMinimum": 0.0,
+            "type": "number"
+          },
+          "orbital_period": {
+            "title": "Orbital Period",
+            "exclusiveMinimum": 0.0,
+            "type": "number"
+          }
+        },
+        "description": "Schema for updating a planet (all fields optional)"
+      },
+      "Token": {
+        "title": "Token",
+        "required": [
+          "access_token"
+        ],
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "title": "Access Token",
+            "type": "string"
+          },
+          "token_type": {
+            "title": "Token Type",
+            "type": "string",
+            "default": "bearer"
+          }
+        },
+        "description": "Schema for JWT token response"
+      },
+      "User": {
+        "title": "User",
+        "required": [
+          "username",
+          "email",
+          "id",
+          "is_active",
+          "created_at"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "Username",
+            "maxLength": 50,
+            "minLength": 3,
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "pattern": "^[^@]+@[^@]+\\.[^@]+$",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "Schema for user response"
+      },
+      "UserLogin": {
+        "title": "UserLogin",
+        "required": [
+          "username",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "description": "Schema for user login"
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
