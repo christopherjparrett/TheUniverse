@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: planets_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-planets_db}
+      POSTGRES_USER: ${POSTGRES_USER:-planets_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-planets_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./Backend/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-planets_user} -d ${POSTGRES_DB:-planets_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - planets_network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: planets_backend
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-planets_user}:${POSTGRES_PASSWORD:-planets_password}@db:5432/${POSTGRES_DB:-planets_db}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-super-secret-jwt-key-change-in-production-make-it-long-and-random}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./Backend:/app
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - planets_network
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: planets_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - planets_network
+
+  # Optional: Prism Mock Server
+  mock-server:
+    image: stoplight/prism:4
+    container_name: planets_mock_server
+    command: ["mock", "-h", "0.0.0.0", "/app/openapi.json"]
+    ports:
+      - "4010:4010"
+    volumes:
+      - ./Backend/openapi.json:/app/openapi.json:ro
+    networks:
+      - planets_network
+    profiles:
+      - mock
+
+# Named volumes for data persistence
+volumes:
+  postgres_data:
+    driver: local
+
+# Custom network for service communication
+networks:
+  planets_network:
+    driver: bridge
