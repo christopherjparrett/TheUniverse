@@ -11,6 +11,9 @@ A FastAPI-based REST API for managing planet data with JWT authentication, SQLAl
 - **📖 Auto-generated Docs**: Swagger UI and ReDoc documentation
 - **🔧 OpenAPI 3.0**: Complete API specification with examples
 - **🚀 FastAPI Framework**: Modern, fast, and type-safe API framework
+- **🧪 Comprehensive Testing**: Unit tests with pytest and coverage reporting
+- **🐳 Docker Support**: Multi-stage Docker builds with health checks
+- **🔄 CI/CD Pipeline**: Automated testing and deployment with GitHub Actions
 
 ## 🚀 Quick Start
 
@@ -293,6 +296,61 @@ if __name__ == "__main__":
 ```
 
 Run with: `python test_api.py`
+
+## 🧪 Testing
+
+The backend includes comprehensive unit tests using pytest. Tests cover all API endpoints, authentication flows, and database models.
+
+### Running Tests
+
+1. **Install test dependencies:**
+   ```bash
+   pip install -r test-requirements.txt
+   ```
+
+2. **Run all tests:**
+   ```bash
+   pytest tests/ -v
+   ```
+
+3. **Run tests with coverage:**
+   ```bash
+   pytest tests/ -v --cov=app --cov-report=html
+   ```
+
+4. **Run specific test files:**
+   ```bash
+   pytest tests/test_endpoints.py -v
+   pytest tests/test_auth.py -v
+   pytest tests/test_models.py -v
+   ```
+
+### Test Structure
+
+- **`tests/test_endpoints.py`**: Tests for all API endpoints (GET, POST, PUT, DELETE)
+- **`tests/test_auth.py`**: Tests for JWT authentication and protected routes
+- **`tests/test_models.py`**: Tests for database models and utilities
+- **`tests/conftest.py`**: Test configuration and fixtures
+
+### Test Coverage
+
+The test suite provides comprehensive coverage including:
+- ✅ All API endpoints (public and protected)
+- ✅ JWT token generation and validation
+- ✅ Authentication flows
+- ✅ Database model operations
+- ✅ Error handling scenarios
+- ✅ Edge cases and validation
+
+### CI/CD Integration
+
+Tests run automatically on:
+- **Push to main/develop branches**
+- **Pull requests**
+- **Docker builds**
+- **Integration testing**
+
+View test results and coverage reports in the GitHub Actions tab.
 
 ## 🚨 Troubleshooting
 

@@ -10,6 +10,8 @@ A modern React frontend application for exploring and managing planets in our so
 - **Admin Panel**: Full CRUD operations for planet management
 - **Responsive Design**: Mobile-first design with Tailwind CSS
 - **Modern UI**: Beautiful gradient backgrounds and smooth animations
+- **Comprehensive Testing**: Unit tests with Vitest and React Testing Library
+- **CI/CD Integration**: Automated testing and deployment pipeline
 
 ## 🚀 Quick Start
 
@@ -74,6 +76,10 @@ The app uses JWT tokens for authentication:
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+- `npm run test` - Run tests in watch mode
+- `npm run test:run` - Run tests once
+- `npm run test:coverage` - Run tests with coverage report
+- `npm run test:ui` - Run tests with UI interface
 
 ## 🎨 Styling
 
@@ -127,6 +133,62 @@ The app is fully responsive with breakpoints:
 - Comprehensive planet information
 - Physical and orbital characteristics
 - Formatted numbers and measurements
+
+## 🧪 Testing
+
+The frontend includes comprehensive unit tests using Vitest and React Testing Library. Tests cover all components, authentication flows, and user interactions.
+
+### Running Tests
+
+1. **Run tests in watch mode:**
+   ```bash
+   npm run test
+   ```
+
+2. **Run tests once:**
+   ```bash
+   npm run test:run
+   ```
+
+3. **Run tests with coverage:**
+   ```bash
+   npm run test:coverage
+   ```
+
+4. **Run tests with UI interface:**
+   ```bash
+   npm run test:ui
+   ```
+
+### Test Structure
+
+- **`__tests__/Planets.test.jsx`**: Tests for Planets directory component
+- **`__tests__/PlanetDetail.test.jsx`**: Tests for Planet detail component
+- **`__tests__/Login.test.jsx`**: Tests for Login component
+- **`__tests__/AuthFlow.test.jsx`**: Tests for authentication flow
+- **`__tests__/ProtectedRoute.test.jsx`**: Tests for protected route component
+- **`src/test/test-utils.js`**: Test utilities and mock helpers
+
+### Test Coverage
+
+The test suite provides comprehensive coverage including:
+- ✅ Component rendering and user interactions
+- ✅ Authentication flow (login, logout, token storage)
+- ✅ Protected route access control
+- ✅ API integration and error handling
+- ✅ Search and filtering functionality
+- ✅ Responsive design behavior
+- ✅ Loading and error states
+
+### CI/CD Integration
+
+Tests run automatically on:
+- **Push to main/develop branches**
+- **Pull requests**
+- **Docker builds**
+- **Integration testing**
+
+View test results and coverage reports in the GitHub Actions tab.
 - Navigation breadcrumbs
 
 ### Admin Panel
