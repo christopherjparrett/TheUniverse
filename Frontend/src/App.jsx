@@ -7,7 +7,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
-import ProtectedRoute from './components/ProtectedRoute';
 import AccessDenied from './components/AccessDenied';
 import HealthCheck from './components/HealthCheck';
 import ApiTest from './components/ApiTest';
@@ -47,27 +46,21 @@ const AppRoutes = () => {
         <Route 
           path="/planets" 
           element={
-            <ProtectedRoute>
-              <Planets />
-            </ProtectedRoute>
+            isAuthenticated ? <Planets /> : <Navigate to="/login" state={{ from: { pathname: '/planets' } }} replace />
           } 
         />
         
         <Route 
           path="/planets/:id" 
           element={
-            <ProtectedRoute>
-              <PlanetDetail />
-            </ProtectedRoute>
+            isAuthenticated ? <PlanetDetail /> : <Navigate to="/login" state={{ from: { pathname: '/planets' } }} replace />
           } 
         />
         
         <Route 
           path="/admin" 
           element={
-            <ProtectedRoute>
-              {isAdmin ? <AdminPanel /> : <AccessDenied />}
-            </ProtectedRoute>
+            isAuthenticated ? (isAdmin ? <AdminPanel /> : <AccessDenied />) : <Navigate to="/login" state={{ from: { pathname: '/admin' } }} replace />
           } 
         />
         
