@@ -24,7 +24,9 @@ const AdminPanel = () => {
     radius: '',
     description: '',
     mass: '',
-    orbital_period: ''
+    orbital_period: '',
+    color: '',
+    image_url: ''
   });
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,7 +73,9 @@ const AdminPanel = () => {
       radius: '',
       description: '',
       mass: '',
-      orbital_period: ''
+      orbital_period: '',
+      color: '',
+      image_url: ''
     });
     setFormErrors({});
   };
@@ -185,7 +189,9 @@ const AdminPanel = () => {
       radius: planet.radius.toString(),
       description: planet.description || '',
       mass: planet.mass ? planet.mass.toString() : '',
-      orbital_period: planet.orbital_period ? planet.orbital_period.toString() : ''
+      orbital_period: planet.orbital_period ? planet.orbital_period.toString() : '',
+      color: planet.color || '',
+      image_url: planet.image_url || ''
     });
     setShowEditModal(true);
   };
@@ -450,6 +456,30 @@ const AdminPanel = () => {
                   onChange={handleInputChange}
                 />
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="form-label">Color (Hex Code)</label>
+                  <input
+                    type="text"
+                    name="color"
+                    className="form-input"
+                    placeholder="#4A90E2"
+                    value={formData.color}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Image URL</label>
+                  <input
+                    type="url"
+                    name="image_url"
+                    className="form-input"
+                    placeholder="https://example.com/image.jpg"
+                    value={formData.image_url}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
               {formErrors.submit && <p className="text-red-500 text-sm">{formErrors.submit}</p>}
               <div className="flex justify-end space-x-3 pt-4">
                 <button
@@ -572,6 +602,30 @@ const AdminPanel = () => {
                   value={formData.description}
                   onChange={handleInputChange}
                 />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="form-label">Color (Hex Code)</label>
+                  <input
+                    type="text"
+                    name="color"
+                    className="form-input"
+                    placeholder="#4A90E2"
+                    value={formData.color}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Image URL</label>
+                  <input
+                    type="url"
+                    name="image_url"
+                    className="form-input"
+                    placeholder="https://example.com/image.jpg"
+                    value={formData.image_url}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
               {formErrors.submit && <p className="text-red-500 text-sm">{formErrors.submit}</p>}
               <div className="flex justify-end space-x-3 pt-4">

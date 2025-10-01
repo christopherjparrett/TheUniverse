@@ -212,7 +212,16 @@ const Planets = () => {
                 className="card-hover bg-white rounded-lg shadow-lg overflow-hidden"
               >
                 {/* Planet Image Placeholder */}
-                <div className="h-48 bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+                <div 
+                  className="h-48 flex items-center justify-center"
+                  style={{
+                    backgroundColor: planet.color || '#6366f1',
+                    backgroundImage: planet.color ? 'none' : 'linear-gradient(to bottom right, var(--tw-gradient-stops))',
+                    '--tw-gradient-from': '#818cf8',
+                    '--tw-gradient-to': '#6366f1',
+                    '--tw-gradient-stops': 'var(--tw-gradient-from), var(--tw-gradient-to)'
+                  }}
+                >
                   <div className="text-white text-6xl font-bold">
                     {planet.name.charAt(0)}
                   </div>

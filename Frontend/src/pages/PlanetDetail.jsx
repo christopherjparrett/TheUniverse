@@ -161,12 +161,41 @@ const PlanetDetail = () => {
           {/* Planet Image and Basic Info */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              {/* Planet Image Placeholder */}
-              <div className="h-64 bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
-                <div className="text-white text-8xl font-bold">
-                  {planet.name.charAt(0)}
+              {/* Planet Image */}
+              {planet.image_url ? (
+                <div className="h-64 overflow-hidden">
+                  <img 
+                    src={planet.image_url} 
+                    alt={planet.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div 
+                    className="h-64 hidden items-center justify-center"
+                    style={{
+                      backgroundColor: planet.color || '#6366f1'
+                    }}
+                  >
+                    <div className="text-white text-8xl font-bold">
+                      {planet.name.charAt(0)}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div 
+                  className="h-64 flex items-center justify-center"
+                  style={{
+                    backgroundColor: planet.color || '#6366f1'
+                  }}
+                >
+                  <div className="text-white text-8xl font-bold">
+                    {planet.name.charAt(0)}
+                  </div>
+                </div>
+              )}
 
               {/* Basic Info */}
               <div className="p-6">
